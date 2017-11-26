@@ -1,11 +1,17 @@
 package com.bie.lesson01;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.RemoteIterator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,6 +33,8 @@ import org.junit.Test;
 * 	亲测，上传貌似不是很受这个影响，但是下载会受影响。
 * 5:在Hadoop的bin目录下放winutils.exe，在环境变量中配置 HADOOP_HOME,
 * 	把hadoop.dll拷贝到C:\Windows\System32下面即可 
+* 6:hdfs dfsadmin -report
+* 		打印集群的状态，比浏览器页面查看的准确。
 */
 public class HdfsClientTest {
 
@@ -67,4 +75,60 @@ public class HdfsClientTest {
 		//关闭fs
 		fs.close();
 	}
+	
+	//获取到conf的内容
+	@Test
+	public void getConf(){
+		Iterator<Entry<String, String>> it = conf.iterator();
+		while(it.hasNext()){
+			Entry<String, String> entry = it.next();
+			//conf加载的内容
+			System.out.println(entry.getKey() + " ......" + entry.getValue());
+		}
+	}
+	
+	//创建文件夹
+	@Test
+	public void mkdirFile() throws IllegalArgumentException, IOException{
+		boolean mkdirs = fs.mkdirs(new Path("/aaa"));	
+		if(mkdirs){
+			System.out.println("文件夹创建成功......");
+		}else{
+			System.out.println("文件夹创建失败......");
+		}
+	}
+	
+	//文件的删除
+	@Test
+	public void deleteFile() throws IllegalArgumentException, IOException{
+		//true， 递归删除
+		boolean delete = fs.delete(new Path("/aaa"),true);
+		if(delete){
+			System.out.println("文件删除成功......");
+		}else{
+			System.out.println("文件删除失败......");
+		}
+	}
+	
+	//列出文件
+	@Test
+	public void listFile() throws FileNotFoundException, IllegalArgumentException, IOException{
+		//列出文件的信息状态
+		FileStatus[] status = fs.listStatus(new Path("/"));
+		for(FileStatus fs : status){
+			System.out.println("长度:" + fs.getLen() + ",路径:"+ fs.getPath() + ",内容:" + fs.toString());
+		}
+		
+		System.out.println("=================================");
+		//遍历出文件
+		RemoteIterator<LocatedFileStatus> iterator = fs.listFiles(new Path("/"), true);
+		while(iterator.hasNext()){
+			LocatedFileStatus lfs = iterator.next();
+			String name = lfs.getPath().getName();
+			Path path = lfs.getPath();
+			System.out.println("名称:" + name +",路径:" + path);
+		}
+	}
+	
+	
 }
