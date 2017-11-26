@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.BlockLocation;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
@@ -127,6 +128,43 @@ public class HdfsClientTest {
 			String name = lfs.getPath().getName();
 			Path path = lfs.getPath();
 			System.out.println("名称:" + name +",路径:" + path);
+		}
+	}
+	
+	
+	//递归列出指定目录下面的所有的子文件夹中的文件
+	@Test
+	public void getFileAndSonFile() throws FileNotFoundException, IllegalArgumentException, IOException{
+		RemoteIterator<LocatedFileStatus> listFiles = fs.listFiles(new Path("/"), true);
+		while(listFiles.hasNext()){
+			LocatedFileStatus fileStatus = listFiles.next();
+			System.out.println("blocksize: " +fileStatus.getBlockSize());
+			System.out.println("owner: " +fileStatus.getOwner());
+			System.out.println("Replication: " +fileStatus.getReplication());
+			System.out.println("Permission: " +fileStatus.getPermission());
+			System.out.println("Name: " +fileStatus.getPath().getName());
+			System.out.println("=================================");
+			BlockLocation[] blockLocations = fileStatus.getBlockLocations();
+			for(BlockLocation b:blockLocations){
+				System.out.println("块起始偏移量: " +b.getOffset());
+				System.out.println("块长度:" + b.getLength());
+				//块所在的datanode节点
+				String[] datanodes = b.getHosts();
+				for(String dn:datanodes){
+					System.out.println("datanode:" + dn);
+				}
+			}
+		}
+	}
+	
+	//判断是文件夹还是目录
+	@Test
+	public void isFileOrDirectory() throws Exception {
+		FileStatus[] listStatus = fs.listStatus(new Path("/"));
+		for(FileStatus file :listStatus){
+			
+			System.out.println("name: " + file.getPath().getName());
+			System.out.println((file.isFile()?"file":"directory"));
 		}
 	}
 	
