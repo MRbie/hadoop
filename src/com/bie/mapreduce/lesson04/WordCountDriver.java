@@ -21,6 +21,12 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class WordCountDriver {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+		if (args == null || args.length == 0) {
+			args = new String[2];
+			args[0] = "hdfs://master:9000/wordcount/input/wordcount.txt";
+			args[1] = "hdfs://master:9000/wordcount/output8";
+		}
+		
 		//配置相应的参数conf
 		Configuration conf = new Configuration();
 		/*conf.set("HADOOP_USER_NAME", "root");
