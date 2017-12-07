@@ -23,6 +23,8 @@ import com.bie.mapreduce.lesson04.WordCountReducer;
 * @date Date:2017年12月3日 下午9:35:55 
 *
 * 1:流量统计的练习
+* 2:[root@master data_hadoop]# hadoop jar flowBean.jar com.bie.mapreduce.lesson05.FlowCount /flowSum/input /flowSum/output 
+
 */
 public class FlowCount {
 
@@ -35,6 +37,7 @@ public class FlowCount {
 			String line = value.toString();
 			//切分字段
 			String[] fields = line.split("\t");
+			//String[] fields = line.split("	");
 			//取出手机号
 			String phone = fields[1];
 			//取出上行流量和下行流量
