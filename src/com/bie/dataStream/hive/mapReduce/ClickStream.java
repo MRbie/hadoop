@@ -198,11 +198,11 @@ public class ClickStream {
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Text.class);
 
-		FileInputFormat.setInputPaths(job, new Path(args[0]));
-		FileOutputFormat.setOutputPath(job, new Path(args[1]));
+		//FileInputFormat.setInputPaths(job, new Path(args[0]));
+		//FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-		//FileInputFormat.setInputPaths(job, new Path("C:/weblog/output"));
-		//FileOutputFormat.setOutputPath(job, new Path("c:/weblog/pageviews"));
+		FileInputFormat.setInputPaths(job, new Path("C:/Users/bhlgo/Desktop/output"));
+		FileOutputFormat.setOutputPath(job, new Path("C:/Users/bhlgo/Desktop/pageviews"));
 
 		job.waitForCompletion(true);
 

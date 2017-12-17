@@ -77,6 +77,8 @@ public class WeblogPreProcess {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 		//创建一个conf对象
 		Configuration conf = new Configuration();
+		//也可以在代码中对conf的配置信息进行手动设置，会覆盖配置文件中的配置信息
+		//conf.set("fs.defaultFS", "hdfs://master:9000");
 		//获取到一个job
 		Job job = Job.getInstance(conf);
 		//指定本程序的jar包所在的本地路径
@@ -89,8 +91,8 @@ public class WeblogPreProcess {
 		//指定job的输入原始文件所在目录
 		FileInputFormat.setInputPaths(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
-		//FileInputFormat.setInputPaths(job, new Path("c:/weblog/input"));
-		//FileOutputFormat.setOutputPath(job, new Path("c:/weblog/output"));
+		//FileInputFormat.setInputPaths(job, new Path("C:/Users/bhlgo/Desktop/input"));
+		//FileOutputFormat.setOutputPath(job, new Path("C:/Users/bhlgo/Desktop/output"));
 		
 		//设置一下Reduce的个数，这里没有用到，所以为0
 		job.setNumReduceTasks(0);
